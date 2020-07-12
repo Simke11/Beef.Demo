@@ -1,12 +1,19 @@
 ﻿using Beef.CodeGen;
-using System;
 using System.Threading.Tasks;
 
 namespace Beef.Demo.CodeGen
 {
-    class Program
+    /// <summary>
+    /// Represents the <b>code generation</b> program (capability).
+    /// </summary>
+    public static class Program
     {
-        static Task<int> Main(string[] args)
+        /// <summary>
+        /// Main startup.
+        /// </summary>
+        /// <param name="args">The startup arguments.</param>
+        /// <returns>The status code whereby zero indicates success.</returns>
+        public static Task<int> Main(string[] args)
         {
             return CodeGenConsoleWrapper.Create("Beef", "Demo").Supports(entity: true, refData: true).RunAsync(args);
         }

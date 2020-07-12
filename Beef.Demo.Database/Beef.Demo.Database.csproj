@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,10 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="Schema\Demo\Stored Procedures\Generated\" />
-    <Folder Include="Schema\Demo\Types\Generated\" />
-    <Folder Include="Schema\Ref\Stored Procedures\Generated\" />
+    <None Remove="Migrations\20190101-000000-create-ref-schema.sql" />
+    <None Remove="Migrations\20190101-000001-create-Demo-schema.sql" />
+    <None Remove="Migrations\20190101-000002-create-ref-gender.sql" />
+    <None Remove="Migrations\20190101-000003-create-Demo-Person.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Schema\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

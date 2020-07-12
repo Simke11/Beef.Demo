@@ -1,26 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Beef.AspNetCore.WebApi;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace Beef.Demo
+namespace Beef.Demo.Api
 {
-    public class Program
+    /// <summary>
+    /// The <b>Web API</b> host/program.
+    /// </summary>
+    public static class Program
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        /// <summary>
+        /// Main startup using the <i>Beef</i> <see cref="WebApiStartup"/> capability to build the host and underlying configuration probing.
+        /// </summary>
+        /// <param name="args">The startup arguments.</param>
+        public static void Main(string[] args) => WebApiStartup.BuildWebHost<Startup>(args, "Demo").Run();
     }
 }

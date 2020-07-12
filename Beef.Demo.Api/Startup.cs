@@ -1,39 +1,115 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Net.Http;
+using System.Reflection;
+using Beef.AspNetCore.WebApi;
+using Beef.Caching.Policy;
+using Beef.Diagnostics;
+using Beef.Entities;
+using Beef.Validation;
+using Beef.WebApi;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
+using Beef.Demo.Business;
+using Beef.Demo.Business.Data;
 
-namespace Beef.Demo
+namespace Beef.Demo.Api
 {
+    /// <summary>
+    /// Represents the <b>startup</b> class.
+    /// </summary>
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="config">The <see cref="IConfiguration"/>.</param>
+        /// <param name="loggerFactory">The <see cref="ILoggerFactory"/>.</param>
+        public Startup(IConfiguration config, ILoggerFactory loggerFactory)
         {
+            // Use JSON property names in validation; default the page size and determine whether unhandled exception details are to be included in the response.
+            ValidationArgs.DefaultUseJsonNames = true;
+            PagingArgs.DefaultTake = config.GetValue<int>("BeefDefaultPageSize");
+            WebApiExceptionHandlerMiddleware.IncludeUnhandledExceptionInResponse = config.GetValue<bool>("BeefIncludeExceptionInInternalServerError");
+
+            // Configure the logger.
+            _logger = loggerFactory.CreateLogger("Logging");
+            Logger.RegisterGlobal((largs) => WebApiStartup.BindLogger(_logger, largs));
+
+            // Configure the cache policies.
+            CachePolicyManager.SetFromCachePolicyConfig(config.GetSection("BeefCaching").Get<CachePolicyConfig>());
+            CachePolicyManager.StartFlushTimer(CachePolicyManager.TenMinutes, CachePolicyManager.FiveMinutes);
+
+            // Register the database.
+            DemoDb.Register(() => new DemoDb(WebApiStartup.GetConnectionString(config, "Database")));
+
+            // Register the ReferenceData provider.
+            Beef.RefData.ReferenceDataManager.Register(new ReferenceDataProvider());
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        /// <summary>
+        /// The configure services method called by the runtime; use this method to add services to the container.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/>.</param>
+        public void ConfigureServices(IServiceCollection services)
         {
-            if (env.IsDevelopment())
+            // Add services; note Beef requires NewtonsoftJson.
+            services.AddControllers().AddNewtonsoftJson();
+            services.AddHealthChecks();
+            services.AddHttpClient();
+
+            services.AddSwaggerGen(c =>
             {
-                app.UseDeveloperExceptionPage();
-            }
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Beef.Demo API", Version = "v1" });
 
+                var xmlName = $"{Assembly.GetEntryAssembly()!.GetName().Name}.xml";
+                var xmlFile = Path.Combine(AppContext.BaseDirectory, xmlName);
+                if (File.Exists(xmlFile))
+                    c.IncludeXmlComments(xmlFile);
+            });
+
+            services.AddSwaggerGenNewtonsoftSupport();
+        }
+
+        /// <summary>
+        /// The configure method called by the runtime; use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">The <see cref="IApplicationBuilder"/>.</param>
+        /// <param name="clientFactory">The <see cref="IHttpClientFactory"/>.</param>
+        public void Configure(IApplicationBuilder app, IHttpClientFactory clientFactory)
+        {
+            // Register the ServiceAgent HttpClientCreate (for cross-domain calls) so it uses the factory.
+            WebApiServiceAgentManager.RegisterHttpClientCreate((rd) =>
+            {
+                var hc = clientFactory.CreateClient(rd.BaseAddress.AbsoluteUri);
+                hc.BaseAddress = rd.BaseAddress;
+                return hc;
+            });
+
+            // Add exception handling to the pipeline.
+            app.UseWebApiExceptionHandler();
+
+            // Add Swagger as a JSON endpoint and to serve the swagger-ui to the pipeline.
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Beef.Demo"));
+
+            // Add health checks page to the pipeline.
+            app.UseHealthChecks("/health");
+
+            // Add execution context set up to the pipeline.
+            app.UseExecutionContext();
+
+            // Use controllers.
             app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
         }
     }
