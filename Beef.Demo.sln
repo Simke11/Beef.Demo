@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beef.Demo.Api", "Beef.Demo.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beef.Demo.CodeGen", "Beef.Demo.CodeGen\Beef.Demo.CodeGen.csproj", "{38BAA809-57F9-43AF-829D-5FE6F00A00DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beef.Demo.Database", "Beef.Demo.Database\Beef.Demo.Database.csproj", "{1C52F389-0DFD-4D93-9FC7-D4412BF00CE5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{38BAA809-57F9-43AF-829D-5FE6F00A00DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38BAA809-57F9-43AF-829D-5FE6F00A00DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38BAA809-57F9-43AF-829D-5FE6F00A00DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C52F389-0DFD-4D93-9FC7-D4412BF00CE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C52F389-0DFD-4D93-9FC7-D4412BF00CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C52F389-0DFD-4D93-9FC7-D4412BF00CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C52F389-0DFD-4D93-9FC7-D4412BF00CE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

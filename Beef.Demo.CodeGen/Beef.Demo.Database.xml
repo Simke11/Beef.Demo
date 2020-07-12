@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeGeneration RefDatabaseSchema="Ref" xmlns="http://schemas.beef.com/codegen/2015/01/database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://github.com/Avanade/Beef/raw/master/tools/Beef.CodeGen.Core/Schema/codegen.table.xsd">
+  <!-- Reference data stored procedures -->
+  <Table Name="Title" Schema="Ref" GetAll="true" />
+
+  <!-- Master data stored procedures. -->
+  <Table Name="Person" Schema="Demo" Get="true" Create="true" Update="true" Delete="true">
+    <StoredProcedure Name="GetAll" Paging="true">
+      <OrderBy Name="LastName" Order="Asc"/>
+      <OrderBy Name="FirstName" Order="Asc"/>
+    </StoredProcedure>
+    <StoredProcedure Name="GetByArgs" Paging="true">
+      <Parameter Name="FirstName" IsNullable="true" IsCollection="false" Operator="LIKE" />
+      <Parameter Name="LastName" IsNullable="true" IsCollection="false" Operator="LIKE" />
+      <Parameter Name="TitleCode" IsNullable="true" IsCollection="true" />
+      <OrderBy Name="LastName" Order="Asc"/>
+      <OrderBy Name="FirstName" Order="Asc"/>
+    </StoredProcedure>
+  </Table>
+</CodeGeneration>

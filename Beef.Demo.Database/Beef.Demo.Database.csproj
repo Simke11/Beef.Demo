@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Beef.Database.Core" Version="3.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Schema\**\*" />
+    <EmbeddedResource Include="Migrations\**\*" />
+    <EmbeddedResource Include="Data\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Schema\Demo\Stored Procedures\Generated\" />
+    <Folder Include="Schema\Demo\Types\Generated\" />
+    <Folder Include="Schema\Ref\Stored Procedures\Generated\" />
+  </ItemGroup>
+
+</Project>
