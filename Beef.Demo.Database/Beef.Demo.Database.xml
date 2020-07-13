@@ -13,4 +13,6 @@
       <OrderBy Name="FirstName" />
     </StoredProcedure>
   </Table>
+
+  <Table Name="Company" Schema="Demo" Get="true" Create="true" Update="true" Delete="true" />
 </CodeGeneration>

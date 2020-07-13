@@ -10,8 +10,6 @@
     <ProjectReference Include="..\Beef.Demo.Common\Beef.Demo.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="DataSvc\" />
-    <Folder Include="Validation\" />
   </ItemGroup>
 </Project>

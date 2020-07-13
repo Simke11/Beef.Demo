@@ -1,0 +1,4 @@
+Demo:
+  - Company:
+    - { CompanyId: 1, Name: RobCo Industries, Address: 123 Test Road, Phone: 123456789 }
+    - { CompanyId: 2, Name: Vault-Tec, Address: 456 Test Street, Phone: 987654321 }

@@ -21,10 +21,11 @@
     <None Remove="Migrations\20190101-000001-create-Demo-schema.sql" />
     <None Remove="Migrations\20190101-000002-create-ref-gender.sql" />
     <None Remove="Migrations\20190101-000003-create-Demo-Person.sql" />
+    <None Remove="Migrations\20190101-000004-create-Demo-Company.sql" />
+    <None Remove="Schema\Demo\Stored Procedures\spCompanyGetAll.sql" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Schema\" />
     <Folder Include="Data\" />
   </ItemGroup>
 

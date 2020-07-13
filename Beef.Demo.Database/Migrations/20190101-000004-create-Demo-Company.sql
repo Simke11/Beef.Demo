@@ -1,0 +1,17 @@
+﻿-- Migration Script
+
+BEGIN TRANSACTION
+
+CREATE TABLE [Demo].[Company](
+   [CompanyId] UNIQUEIDENTIFIER NOT NULL DEFAULT (NEWSEQUENTIALID()) PRIMARY KEY,
+   [Name] NVARCHAR(100) NULL,
+   [Address] NVARCHAR(250) NULL,
+   [Phone] NVARCHAR(50) NULL,
+   [RowVersion] TIMESTAMP NOT NULL,
+   [CreatedBy] NVARCHAR(250) NULL,
+   [CreatedDate] DATETIME2 NULL,
+   [UpdatedBy] NVARCHAR(250) NULL,
+   [UpdatedDate] DATETIME2 NULL,
+)
+	
+COMMIT TRANSACTION
